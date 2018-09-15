@@ -1,18 +1,25 @@
 import math
 import numpy as np
 
-def relu(net):
-    out = []
-    for i in range(len(net)):
-        out[i].append(max(0,net[i]))
-    return np.asarray(out)
+class nothing:
+    def __init__(self):
+        pass
 
-class sigmoid():
+    def forward(self, net):
+        return net.copy()
+
+    def backward(self, net, out):
+        return np.ones(len(net))
+
+class sigmoid:
+    def __init__(self):
+        pass
     def forward(self,net):
         out = []
         for i in range(len(net)):
-            cur = 1.0 / (1.0 + math.exp(-net[i]))
-            out[i].append(cur)
+            cut_off_net = net[i] if net[i]>-100 else -float("inf")# 超过-100就当作-inf处理，不然exp时候会报错
+            cur = 1.0 / (1.0 + math.exp(-cut_off_net))
+            out.append(cur)
         return np.asarray(out)
 
     def backward(self,net,out):
